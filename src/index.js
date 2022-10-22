@@ -1,22 +1,23 @@
-const express = require('express'); // framework 
+const express = require('express'); //frmawork
 const bodyParser = require('body-parser');   
-const route =require("./routes/route.js");
-const mongoose  = require('mongoose');   // liberary 
+const route = require("./routes/route.js");   
+const mongoose = require('mongoose');   //libreary
 
-const app = express();
-const multer= require("multer");
-app.use(bodyParser.json()); //
-app.use( multer().any())
+const app = express();    
+const multer = require("multer");   
+
+app.use(bodyParser.json());
+app.use(multer().any())   
 
 
 mongoose.connect("mongodb+srv://rakib123:rakib1234@cluster0.bwxs7wf.mongodb.net/group25Database", {
-    useNewUrlParser: true
+    useNewUrlParser: true    
 })
-.then( () => console.log("MongoDb is connected"))
-.catch ( err => console.log(err) )
+    .then(() => console.log("MongoDb is connected"))
+    .catch(err => console.log(err))
 
- 
- app.use('/', route);
+
+app.use('/', route);
 
 
 app.listen(process.env.PORT || 3000, function () {

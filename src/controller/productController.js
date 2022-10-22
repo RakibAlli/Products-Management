@@ -1,5 +1,5 @@
 const productModel = require('../model/productModel')
-const {validSize,isValidNames,isValidMixed, isValid, isValidName, isValidPrice, isValidNumber, isvalidObjectId, isValidImage } = require('../validation/validator')
+const {validSize,isValidNames, isValid, isValidName, isValidPrice, isValidNumber, isvalidObjectId, isValidImage } = require('../validation/validator')
 const { uploadFile } = require('../middleware/aws')
 
 
@@ -14,9 +14,9 @@ const createproduct = async function (req, res) {
 
 
         if (!isValid(title)) return res.status(400).send({ status: false, message: "Please provide title" })
-        if (!isValidName(title)) return res.status(400).send({ status: false, message: "Please provide valid title" })
+        if (!isValidNames(title)) return res.status(400).send({ status: false, message: "Please provide valid title" })
         let titleexist = await productModel.findOne({ title: title, isDeleted: false })
-        if (titleexist) return res.status(404).send({ status: false, message: "title is already exist" })
+        if (titleexist) return res.status(409).send({ status: false, message: "title is already exist" })
 
         if (!isValid(description)) return res.status(400).send({ status: false, message: "Please provide description" })
         if (!isValidName(description.trim())) return res.status(400).send({ status: false, message: "Please provide valid description" })
@@ -36,10 +36,11 @@ const createproduct = async function (req, res) {
 
         if (isFreeShipping) {
             if (!isValid(isFreeShipping)) return res.status(400).send({ status: false, message: "Please enter fresshipping value" })
+            if(isFreeShipping !=="true" && isFreeShipping !=="false" ) return res.status(400).send({status:false, message:"Please provide only true or false value"})
         }
 
         if (!isValid(style)) return res.status(400).send({ status: false, message: "Please provide style" })
-        if (!isValidNames(style)) return res.status(400).send({ status: false, message: "style must be in characters" })
+        if (!isValidName(style)) return res.status(400).send({ status: false, message: "style must be in characters" })
 
         // if (!isValid(availableSizes)) return res.status(400).send({ status: false, message: "Please provide availablesize" })
         if ((!availableSizes) || !validSize(availableSizes)) return res.status(400).send({ status: false, message: " Provide availableSizes their values can be only S, XS,M, X, L, XXL" })
@@ -138,7 +139,7 @@ const getProduct = async function (req, res) {
             if (!products) return res.status(404).send({ status: false, message: 'No products found' })
             return res.status(200).send({ status: true, message: 'Success', data: products });
         }
-        console.log(filter)
+        // console.log(filter)
         // find collection without filters
         const findData = await productModel.find(filter).sort({ price: 1 });
         if (findData.length == 0)
@@ -194,9 +195,9 @@ const updateproduct = async function (req, res) {
 
         if (title) {
             if (!isValid(title)) return res.status(400).send({ status: false, message: "Please provide title" })
-            if (!isValidName(title)) return res.status(400).send({ status: false, message: "Please provide valid title" })
+            if (!isValidNames(title)) return res.status(400).send({ status: false, message: "Please provide valid title" })
             let titleexist = await productModel.findOne({ title: title, isDeleted: false })
-            if (titleexist) return res.status(404).send({ status: false, message: "title is already exist" })
+            if (titleexist) return res.status(409).send({ status: false, message: "title is already exist" })
             updations.title = title
         }
 
@@ -225,6 +226,7 @@ const updateproduct = async function (req, res) {
 
         if (isFreeShipping ) {
             if (!isValid(isFreeShipping)) return res.status(400).send({ status: false, message: "Please enter fresshipping value" })
+            if(isFreeShipping !=="true" && isFreeShipping !=="false" ) return res.status(400).send({status:false, message:"Please provide only true or false value"})
             updations.isFreeShipping = isFreeShipping
         }
 
@@ -261,7 +263,7 @@ const updateproduct = async function (req, res) {
             updations["productImage"] = uploadedFileURL
         }
 
-        console.log(updations)
+        // console.log(updations)
         let updated = await productModel.findOneAndUpdate({ _id: productId, isDeleted: false }, { $set: updations }, { new: true })
         if (!updated) return res.status(400).send({ status: false, message: "No product found" })
         return res.status(200).send({ status: true, message: "Updation successfull", data: updated })

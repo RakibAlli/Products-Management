@@ -1,7 +1,7 @@
 const productModel = require('../model/productModel')
 const userModel = require('../model/userModel')
 const cartModel = require('../model/cartModel')
-const { isValid, isvalidObjectId,isValidBody} = require('../validation/validator')
+const { isValid, isvalidObjectId} = require('../validation/validator')
 
 
 const createcart = async function (req, res) {
@@ -92,7 +92,7 @@ const getCart = async function (req, res) {
             return res.status(404).send({ status: false, message: "User details are not found or may be deleted" })
         }
 
-        let getData = await cartModel.findOne({ userId });
+        let getData = await cartModel.findOne({ userId :userId });
         if (getData.items.length == 0)
             return res.status(404).send({ status: false, message: "No items present" });
 
@@ -137,11 +137,7 @@ const updateCartById = async function (req, res) {
         let requestBody = req.body;
 
         // Validate the reqBody
-        // if (!isValidBody(requestBody)) {
-        //     return res
-        //         .status(400)
-        //         .send({ status: false, message: `Invalid Request parameters` });
-        // }
+        
          if(Object.keys(requestBody).length == 0) {return res
                  .status(400)
                  .send({ status: false, message: `Invalid Request parameters` });
@@ -255,7 +251,7 @@ const updateCartById = async function (req, res) {
             const updatedCart = await cartModel.findOneAndUpdate(
                 { userId: userId },
                 {
-                    $pull: { items: { productId: productId } },
+                    $pull: { items: { productId: productId } },  
                     $inc: {
                         totalPrice: -productPrice,
                         totalItems: -1,
@@ -310,12 +306,12 @@ const deleteCart = async function (req, res) {
         }
 
         // To check cart is present or not
-        const cartSearch = await cartModel.findOne({ userId })
+        const cartSearch = await cartModel.findOne({ userId:userId })
         if (!cartSearch) {
             return res.status(404).send({ status: false, message: "Cart details are not found " })
         }
 
-        const cartDelete = await cartModel.findOneAndUpdate({ userId }, { $set: { items: [], totalItems: 0, totalPrice: 0 } }, { new: true })
+        const cartDelete = await cartModel.findOneAndUpdate({ userId:userId }, { $set: { items: [], totalItems: 0, totalPrice: 0 } }, { new: true })
         // console.log(cartDelete)
         return res.status(204).send({ status: true, message:"Cart is deleted successfully"})
 

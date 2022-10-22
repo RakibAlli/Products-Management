@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/sabihak89/plutonium.git"
   },
-  "author": "rakib",
+  "author": "Akshata Parghane",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/sabihak89/plutonium/issues"
@@ -25,7 +25,6 @@
     "moment": "^2.29.4",
     "mongoose": "^6.6.5",
     "multer": "^1.4.5-lts.1",
-    "nodemon": "^2.0.20",
-    "trim": "^1.0.1"
+    "nodemon": "^2.0.20"
   }
 }

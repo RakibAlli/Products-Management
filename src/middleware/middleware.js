@@ -9,7 +9,7 @@ const authentication = async function(req,res,next)
 {
     try{
         let token = req.header("Authorization")
-        console.log(token)
+        // console.log(token)
         if(!token)  return res.status(401).send({ status: false, message: "Please enter Token" })
         const bearer = token.split(' ')
         const bearerToken = bearer[1]
@@ -31,14 +31,11 @@ const authentication = async function(req,res,next)
 const authorization= async function (req,res,next){
     try {
         let  userId = req.params.userId
-        if(!isvalidObjectId(userId))
-        return res.status(400).send({ status: false, message:"please provide the valid userId"})
+        if(!isvalidObjectId(userId)) return res.status(400).send({ status: false, message:"please provide the valid userId"})
         let tokenUserId = req.decodetoken.userId
         const checkUser = await userModel.findById({_id:userId})
-        if(!checkUser)
-        return res.status(404).send({ status: false, message:"No user found"});
-        if(tokenUserId !=userId)
-        return res.status(403).send({ status: false, message: "You are not authorized"})
+        if(!checkUser) return res.status(404).send({ status: false, message:"No user found"});
+        if(tokenUserId !=userId)return res.status(403).send({ status: false, message: "You are not authorized"})
         next();
     } catch (err) {
         return res.status(500).send({ status: false, message:err.message})

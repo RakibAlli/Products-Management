@@ -19,14 +19,14 @@ const isValidPhone = function (number) {
 }
 
 const isValidName = function (value) {
-    // const regex = /^[a-zA-Z]+([\s][a-zA-Z]+)*$/
-    //const regex =  /(?<![0-9]\S{0,100})[^a-zA-Z](?!\S{0,100}[0-9])|(?<=[0-9]\S{0,100})[^a-zA-Z0-9-](?=\S{0,100}[0-9])/
-    const regex=/([a-zA-z])+/g
+    //  const regex = /^[a-zA-Z]+([\s][a-zA-Z]+)*$/
+    // const regex =  /(?<![0-9]\S{0,100})[^a-zA-Z](?!\S{0,100}[0-9])|(?<=[0-9]\S{0,100})[^a-zA-Z0-9-](?=\S{0,100}[0-9])/
+     const regex=/([a-zA-z])+/g
     return regex.test(value)
 }
 const isValidNames = function (value) {
-     const regex = /^[a-zA-Z]+([\s][a-zA-Z]+)*$/
-    // const regex =  /(?<![0-9]\S{0,100})[^a-zA-Z](?!\S{0,100}[0-9])|(?<=[0-9]\S{0,100})[^a-zA-Z0-9-](?=\S{0,100}[0-9])/
+    //  const regex = /^[a-zA-Z]+([\s][a-zA-Z]+)*$/
+     const regex =  /(?<![0-9]\S{0,100})[^a-zA-Z](?!\S{0,100}[0-9])|(?<=[0-9]\S{0,100})[^a-zA-Z0-9-](?=\S{0,100}[0-9])/
     return regex.test(value)
 }
 const isValidPassword = function (value) {
